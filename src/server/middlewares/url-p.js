@@ -3,13 +3,20 @@ import sh from 'shorthash'
 import { URL } from 'url'
 
 export default function parseUrlFromPath(req, res, next) {
-  const { pullSetting } = req._params
+  const {
+    project: {
+      domain,
+      protocol
+    }
+  } = req._params
+  const pullUrl = protocol + '://' + domain
+
   const url = new URL(
     req.params[0] + (
       Object.keys(req.query).length ?
         '?' + querystring.stringify(req.query) : ''
     ),
-    pullSetting.pullUrl
+    pullUrl
   ).toString()
   req._params = {
     ...req._params,
